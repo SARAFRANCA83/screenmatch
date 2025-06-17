@@ -4,6 +4,7 @@ import br.com.sfranca.screenmatch.model.DadosSerie;
 import br.com.sfranca.screenmatch.model.DadosTemporada;
 import br.com.sfranca.screenmatch.model.Episodio;
 import br.com.sfranca.screenmatch.model.Serie;
+import br.com.sfranca.screenmatch.repository.SerieRepository;
 import br.com.sfranca.screenmatch.service.ConsumoApi;
 import br.com.sfranca.screenmatch.service.ConverteDados;
 
@@ -19,6 +20,12 @@ public class Principal {
 
     private final String API_KEY = "&apikey=6585022c";
     private List<DadosSerie> dadosSerie = new ArrayList<>();
+
+    private SerieRepository repositorio;
+
+    public Principal(SerieRepository repositorio) {
+        this.repositorio = repositorio;
+    }
 
     public void exibeMenu() {
         var opcao = -1;
@@ -55,10 +62,16 @@ public class Principal {
     }
 
     private void buscarSerieWeb() {
-        DadosSerie dados = getDadosSerie();
-        dadosSerie.add(dados);
-        System.out.println(dados);
+        try {
+            DadosSerie dados = getDadosSerie();
+            Serie serie = new Serie(dados);
+            repositorio.save(serie);
+            System.out.println(dados);
+        } catch (Exception e) {
+            System.out.println("Erro ao criar ou salvar a série: " + e.getMessage());
+        }
     }
+
 
     private DadosSerie getDadosSerie() {
         System.out.println("Digite o nome da série para busca");

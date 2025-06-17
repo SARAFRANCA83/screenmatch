@@ -5,19 +5,14 @@ import br.com.sfranca.screenmatch.service.AwsTradutor;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
 @Entity
 @Table(name = "series")
 public class Serie {
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +29,24 @@ public class Serie {
     private String poster;
     private String sinopse;
 
+    @Transient
+    private List<Episodio> episodios = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        this.episodios = episodios;
+    }
 
     public Serie(DadosSerie dadosSerie) throws Exception {
         this.titulo = dadosSerie.titulo();
@@ -42,6 +55,7 @@ public class Serie {
         this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
         this.atores = dadosSerie.atores();
         this.sinopse = AwsTradutor.traduzir(dadosSerie.sinopse()).trim();
+        this.poster = dadosSerie.poster();
 
     }
 
