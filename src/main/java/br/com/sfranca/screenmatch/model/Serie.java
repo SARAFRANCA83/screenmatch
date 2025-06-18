@@ -48,6 +48,7 @@ public class Serie {
         this.episodios = episodios;
     }
 
+    public Serie (){}
     public Serie(DadosSerie dadosSerie) throws Exception {
         this.titulo = dadosSerie.titulo();
         this.totalTemporadas = dadosSerie.totalTemporadas();

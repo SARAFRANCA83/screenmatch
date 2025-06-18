@@ -11,6 +11,8 @@ import br.com.sfranca.screenmatch.service.ConverteDados;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.hibernate.internal.util.collections.ArrayHelper.forEach;
+
 public class Principal {
 
     private Scanner leitura = new Scanner(System.in);
@@ -93,20 +95,17 @@ public class Principal {
         temporadas.forEach(System.out::println);
     }
 
+
     private void listarSeriesBuscadas() {
-        List<Serie> series = dadosSerie.stream()
-                .map(d -> {
-                    try {
-                        return new Serie(d);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                })
+        List<Serie> series = repositorio.findAll();
+        series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
-                .collect(Collectors.toList());
+                .forEach(System.out::println);
 
 
-        series.forEach(System.out::println);
+
+
+        //series.forEach(System.out::println);
     }
 
 }
