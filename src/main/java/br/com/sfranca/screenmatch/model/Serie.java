@@ -29,9 +29,21 @@ public class Serie {
     private String poster;
     private String sinopse;
 
-    @OneToMany(mappedBy = "serie")
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios = new ArrayList<>();
 
+
+
+    public Serie (){}
+    public Serie(DadosSerie dadosSerie) throws Exception {
+        this.titulo = dadosSerie.titulo();
+        this.totalTemporadas = dadosSerie.totalTemporadas();
+        this.avaliacao = OptionalDouble.of(Double.valueOf(dadosSerie.avaliacao())).orElse(0);
+        this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
+        this.atores = dadosSerie.atores();
+        this.sinopse = AwsTradutor.traduzir(dadosSerie.sinopse()).trim();
+        this.poster = dadosSerie.poster();
+    }
     public Long getId() {
         return id;
     }
@@ -45,20 +57,10 @@ public class Serie {
     }
 
     public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
         this.episodios = episodios;
     }
 
-    public Serie (){}
-    public Serie(DadosSerie dadosSerie) throws Exception {
-        this.titulo = dadosSerie.titulo();
-        this.totalTemporadas = dadosSerie.totalTemporadas();
-        this.avaliacao = OptionalDouble.of(Double.valueOf(dadosSerie.avaliacao())).orElse(0);
-        this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
-        this.atores = dadosSerie.atores();
-        this.sinopse = AwsTradutor.traduzir(dadosSerie.sinopse()).trim();
-        this.poster = dadosSerie.poster();
-
-    }
 
     public String getTitulo() {
         return titulo;
@@ -125,7 +127,8 @@ public class Serie {
                 ", avaliacao=" + avaliacao +
                 ", atores='" + atores + '\'' +
                 ", poster='" + poster + '\'' +
-                ", sinopse='" + sinopse + '\'';
+                ", sinopse='" + sinopse + '\'' +
+                ", episodios='" + episodios + '\'';
 
     }
 }
