@@ -36,6 +36,8 @@ public class Principal {
                     2 - Buscar episódios
                     3 - Listar séries buscadas
                     4 - Buscar série por título
+                    5 - Buscar séries por ator
+                    6 - Top 5 Séries
                     
                     0 - Sair                                 
                     """;
@@ -56,6 +58,11 @@ public class Principal {
                     break;
                 case 4:
                     buscarSeriePorTitulo();
+                case 5:
+                    burcarSeriesPorAtor();
+                    break;
+                case 6:
+                    buscarTop5Series();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -65,6 +72,7 @@ public class Principal {
             }
         }
     }
+
 
 
     private void buscarSerieWeb() {
@@ -136,9 +144,31 @@ public class Principal {
         } else {
             System.out.println("Série não encontrada !");
 
-
         }
 
     }
+    private void burcarSeriesPorAtor() {
+        System.out.println("Qual nome para busca? ");
+        var nomeAtor = leitura.nextLine();
+        System.out.println("Avaliações a partir de que valor? ");
+        var avaliacao = leitura.nextDouble();
+        List<Serie> seriesEncontradas = repositorio.findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(nomeAtor, avaliacao);
+
+        if (seriesEncontradas.isEmpty()) {
+            System.out.println("Nenhuma série encontrada com o ator " + nomeAtor + ".");
+        } else {
+            System.out.println("Séries em que o " + nomeAtor + " trabalhou:");
+            seriesEncontradas.forEach(s ->
+                    System.out.println(s.getTitulo() + " - avaliação: " + s.getAvaliacao()));
+        }
+    }
+    private void buscarTop5Series() {
+        System.out.println("Quais as séries você quer? ");
+        List<Serie> serieTop = repositorio.findTop5ByOrderByAvaliacaoDesc();
+        serieTop.forEach(s ->
+                System.out.println(s.getTitulo() + " - avaliação: " + s.getAvaliacao()));
+    }
 
 }
+
+
