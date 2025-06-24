@@ -1,9 +1,6 @@
 package br.com.sfranca.screenmatch.principal;
 
-import br.com.sfranca.screenmatch.model.DadosSerie;
-import br.com.sfranca.screenmatch.model.DadosTemporada;
-import br.com.sfranca.screenmatch.model.Episodio;
-import br.com.sfranca.screenmatch.model.Serie;
+import br.com.sfranca.screenmatch.model.*;
 import br.com.sfranca.screenmatch.repository.SerieRepository;
 import br.com.sfranca.screenmatch.service.ConsumoApi;
 import br.com.sfranca.screenmatch.service.ConverteDados;
@@ -38,6 +35,7 @@ public class Principal {
                     4 - Buscar série por título
                     5 - Buscar séries por ator
                     6 - Top 5 Séries
+                    7 - Buscar séries por categoria
                     
                     0 - Sair                                 
                     """;
@@ -59,10 +57,12 @@ public class Principal {
                 case 4:
                     buscarSeriePorTitulo();
                 case 5:
-                    burcarSeriesPorAtor();
+                    buscarSeriesPorAtor();
                     break;
                 case 6:
                     buscarTop5Series();
+                case 7:
+                    buscarSeriesPorCategoria();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -147,7 +147,7 @@ public class Principal {
         }
 
     }
-    private void burcarSeriesPorAtor() {
+    private void buscarSeriesPorAtor() {
         System.out.println("Qual nome para busca? ");
         var nomeAtor = leitura.nextLine();
         System.out.println("Avaliações a partir de que valor? ");
@@ -167,6 +167,16 @@ public class Principal {
         List<Serie> serieTop = repositorio.findTop5ByOrderByAvaliacaoDesc();
         serieTop.forEach(s ->
                 System.out.println(s.getTitulo() + " - avaliação: " + s.getAvaliacao()));
+    }
+    private void buscarSeriesPorCategoria(){
+        System.out.println("Deseja buscar série de que categoria/gênero? ");
+        var nomeGenero = leitura.nextLine();
+        Categoria categoria = Categoria.fromPortugues(nomeGenero);
+        List<Serie> seriesPorCategoria = repositorio.findByGenero(categoria);
+        System.out.println("Séries da categoria" + nomeGenero);
+        seriesPorCategoria.forEach(System.out::println);
+
+
     }
 
 }
