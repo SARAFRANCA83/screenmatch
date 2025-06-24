@@ -16,7 +16,7 @@ public class Principal {
     private ConverteDados conversor = new ConverteDados();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
 
-    private final String API_KEY = "&apikey=6585022c";
+    private final String API_KEY = "OMDB_API_KEY";
     private List<DadosSerie> dadosSerie = new ArrayList<>();
     private SerieRepository repositorio;
     private List<Serie> series = new ArrayList<>();
@@ -36,6 +36,7 @@ public class Principal {
                     5 - Buscar séries por ator
                     6 - Top 5 Séries
                     7 - Buscar séries por categoria
+                    8 - Filtrar séries
                     
                     0 - Sair                                 
                     """;
@@ -63,6 +64,8 @@ public class Principal {
                     buscarTop5Series();
                 case 7:
                     buscarSeriesPorCategoria();
+                case 8:
+                    filtrarSeriesPorTemporadaEAvaliacao();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -72,7 +75,6 @@ public class Principal {
             }
         }
     }
-
 
 
     private void buscarSerieWeb() {
@@ -178,7 +180,24 @@ public class Principal {
 
 
     }
+    private void filtrarSeriesPorTemporadaEAvaliacao() {
+        System.out.println("Filtrar séries até quantas temporadas? ");
+        var totalTemporadas = leitura.nextInt();
+        leitura.nextLine();
+
+        System.out.println("Com avaliação a partir de que valor? ");
+        var avaliacao = leitura.nextDouble();
+        leitura.nextLine();
+
+        List<Serie> filtroSeries = repositorio.findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(totalTemporadas, avaliacao);
+
+        System.out.println("*** Séries filtradas ***");
+        filtroSeries.forEach(s ->
+                System.out.println(s.getTitulo() + "  - avaliação: " + s.getAvaliacao() + " - temporadas: " + s.getTotalTemporadas()));
+    }
 
 }
+
+
 
 
