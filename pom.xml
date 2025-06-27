@@ -44,12 +44,12 @@
 			<version>2.10.1</version>
 		</dependency>
 
-		<!-- OpenAI Client (opcional, só se estiver usando) -->
+		<!-- OpenAI Client (opcional, só se estiver usando)
 		<dependency>
 			<groupId>com.theokanning.openai-gpt3-java</groupId>
 			<artifactId>service</artifactId>
 			<version>0.14.0</version>
-		</dependency>
+		</dependency>-->
 
 		<!-- Testes -->
 		<dependency>
@@ -73,6 +73,13 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
 
 	</dependencies>
